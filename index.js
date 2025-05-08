@@ -32,12 +32,29 @@ async function run() {
   try {
     // await client.connect();
 
-    const campgainCollection = client.db("campgainDb").collection("campgain");
     const projectCollection = client.db("campgainDb").collection("project");
-    const userCollection = client.db("campgainDb").collection("user");
-    const reviewsCollection = client.db("campgainDb").collection('reviews');
+    const courseCollection = client.db("campgainDb").collection("course");
+
 
     // post operation  ................
+
+    app.post("/course", async(req, res) => {
+      const courseList = req.body;
+      const result = await courseCollection.insertOne(courseList);
+      res.send(result);
+    })
+
+    app.get("/course", async(req, res) =>{
+      const getCourse = await courseCollection.find().toArray();
+      res.send(getCourse)
+    })
+
+    app.delete('/course/:id', async(req, res)=>{
+      const id = req.params.id;
+      const query = {_id : new ObjectId(id)}
+      const result = await courseCollection.deleteOne(query);
+      res.send(result)
+    })
 
 
     app.post('/project', async(req,res)=>{
